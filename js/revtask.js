@@ -10,24 +10,26 @@
   var probsum = task_prob.reduce(function(x, y) { return x + y; });
 
   function gen_task() {
-    var prob_table = [];
-    task_prob.forEach(function (v) {
-      prob_table.push(v / probsum);
-    });
-
     var music = musics[Math.round(Math.random() * musics.length)];
     var difficulty_num = Math.round(Math.random() * music.levels.length);
     if (music.levels.length <= difficulty_num || music.levels[difficulty_num] == "") {
       return gen_task();
     }
 
+    var prob_table = [];
+    task_prob.forEach(function (v) {
+      prob_table.push(v / probsum);
+    });
+
     for (var i = 0; i < prob_table.length - 1; i++) {
       prob_table[i + 1] = prob_table[i + 1] + prob_table[i];
     }
 
+    prob_table[prob_table.length - 1] = 1.1;
+
     var task;
     var rand = Math.random();
-    for (var i = 0; i < prob_table.length - 1; i++) {
+    for (var i = 0; i < prob_table.length; i++) {
       if (rand < prob_table[i]) {
         task = tasks[i];
         break;
